@@ -1,0 +1,557 @@
+/* -----------------------------
+   COLOR & FONT
+------------------------------ */
+:root {
+    --primary-bg: #f5f5f5;      /* Main page background */
+    --light-bg:#faf8f3;
+    --dark-text: #2c2c2c;       /* Text color */
+    --accent-color: #a0743c;    /* Subtle accent for buttons/links */
+    --light-text: #ffffff;      /* White text on dark backgrounds */
+    --section-bg: #ffffff;      /* White sections for contrast */
+}
+
+body {
+    background-color: var(--primary-bg);
+    color: var(--dark-text);
+    font-family: 'Bodoni Moda SC', sans-serif; /* Updated font reference */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2a6041; /* Emerald Green headings */
+    font-weight: 600;
+}
+
+/* -----------------------------
+   NAVBAR
+------------------------------ */
+.navbar {
+    background-color: transparent !important;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+}
+.navbar-dark .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.navbar-dark .navbar-nav .nav-link {
+    font-weight: 500;
+}
+.navbar-bg {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+}
+.scrolled .navbar-bg {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    transition: background-color 0.3s ease;
+}
+
+/* -----------------------------
+   HERO SECTION
+------------------------------ */
+.hero {
+    height: 100vh;
+    min-height: 600px;
+    background: url('https://images.unsplash.com/photo-1598346762291-c84b79a63f1c') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: var(--light-text);
+    max-width: 600px;
+    margin: 0 1rem;
+}
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* -----------------------------
+   BUTTONS & ANIMATIONS
+------------------------------ */
+.btn-accent {
+    background-color: var(--accent-color);
+    color: var(--light-text);
+    border: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.btn-accent:hover {
+    background-color: #8d6736; /* darken accent a bit */
+    transform: translateY(-2px);
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* -----------------------------
+   MAIN CONTENT SECTION
+------------------------------ */
+section {
+    padding: 4rem 0;
+    background-color: var(--section-bg);
+}
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+/* -----------------------------
+   GALLERY
+------------------------------ */
+.gallery-img {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.gallery-img:hover {
+    transform: scale(1.02);
+}
+
+/* -----------------------------
+   MODAL for GALLERY
+------------------------------ */
+.modal-content {
+    background-color: #fff;
+    border: none;
+    border-radius: 0;
+}
+.modal-body img {
+    width: 100%;
+    height: auto;
+}
+.modal-description {
+    font-size: 1rem;
+    margin-top: 1rem;
+    color: #555;
+}
+
+/* -----------------------------
+   REVIEWS
+------------------------------ */
+.review-card {
+    background-color: var(--primary-bg);
+    border: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+.review-card:hover {
+    transform: translateY(-3px);
+}
+.review-card .card-body {
+    padding: 1.5rem;
+}
+.review-quote {
+    font-size: 1rem;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+.review-author {
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+/* -----------------------------
+   FOOTER
+------------------------------ */
+footer {
+    background-color: var(--dark-text);
+    color: var(--light-text);
+    text-align: center;
+    padding: 1.5rem 0;
+}
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Dark gallery section background */
+#gallery {
+    background-color: #1c1c1c;
+    color: #fff;
+    padding: 4rem 0;
+  }
+
+  /* Section title styling */
+  .section-title {
+    color: #fff;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 3px;
+    background-color: #a0743c; /* gold accent */
+    margin: 1rem auto 0;
+  }
+
+  /* CARD STYLING */
+  .card {
+    background-color: #2a2a2a;      /* Slightly lighter than section for contrast */
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    overflow: hidden;               /* ensures rounded corners for the image */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Enforce a minimum height so cards align well even if text is short or long */
+    min-height: 400px;
+    display: flex;                  /* let us align content if needed */
+    flex-direction: column;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+  }
+
+  /* The top image: consistent height & cover */
+  .card-img-top {
+    height: 220px;                /* fixed height for uniformity */
+    object-fit: cover;            /* crop to fill the area */
+  }
+
+  /* Card body: ensure it fills remaining space nicely */
+  .card-body {
+    flex: 1;                      /* take available vertical space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* push content to bottom if needed */
+  }
+
+  /* Titles & text on the card */
+  .card-title,
+  .card-text {
+    color: #fff;  /* white text on dark background */
+  }
+
+  /* Make the text stand out a bit more */
+  .card-text {
+    color: #ccc;
+  }
+
+  /* If text is too long, we can truncate or limit lines (optional) */
+  .card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;        /* show only 2 lines, then ellipsis */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* The 'See More' approach, if you want a button in the card body
+     (Optional if you rely on clicking the image to open the modal) */
+
+  /* GALLERY IMAGES: extra hover effect if desired */
+  .gallery-img:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+
+
+  /* Make the modal content dark, rounded, and shadowed */
+.modal-content {
+    background-color: #2a2a2a;  /* dark background */
+    color: #fff;               /* white text for contrast */
+    border: none;              /* remove default border */
+    border-radius: 12px;       /* smooth corners */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); /* deeper shadow */
+    overflow: hidden;          /* ensure rounded corners show */
+  }
+
+  /* Optional: style the modal header & footer if you use them */
+  .modal-header,
+  .modal-footer {
+    background-color: #2a2a2a; /* match the modal-content */
+    border: none;              /* remove default border line */
+  }
+
+  /* The “Close” button (X) in the top-right corner */
+  .btn-close {
+    filter: invert(1);  /* makes the default close icon white */
+    opacity: 0.8;
+  }
+  .btn-close:hover {
+    opacity: 1;
+  }
+
+  /* Customize the default “Close” button in the footer, if using .btn-secondary */
+  .btn-secondary {
+    background-color: #444;
+    border: none;
+    color: #fff;
+  }
+  .btn-secondary:hover {
+    background-color: #666;
+  }
+
+  /* Make the modal image more polished */
+  .modal-body img {
+    border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Tweak text styling inside the modal */
+  #modalTitle {
+    font-weight: 600;
+    font-size: 1.3rem;
+  }
+  #modalDesc {
+    font-size: 1rem;
+    color: #ccc;
+  }
+
+
+  .gallery-modal-content {
+    background-color: #2a2a2a;   /* Dark background */
+    color: #fff;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    overflow: hidden;           /* keep corners rounded */
+  }
+
+  /* The arrow buttons: circular, minimal, semi-transparent */
+  .gallery-arrow {
+    background-color: rgba(0,0,0,0.5);
+    border: none;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    margin: 0 5px;
+  }
+  .gallery-arrow:hover {
+    background-color: rgba(0,0,0,0.8);
+  }
+  .gallery-arrow i {
+    pointer-events: none; /* so clicks pass to the button */
+  }
+
+  /* Make the close button (if .btn-secondary) match the dark theme */
+  .btn-secondary {
+    background-color: #444;
+    border: none;
+    color: #fff;
+  }
+  .btn-secondary:hover {
+    background-color: #666;
+  }
+
+  .gallery-card {
+    background-color: #2a2a2a;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 400px;  /* uniform card height */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+  }
+
+  .gallery-img {
+    height: 220px;
+    object-fit: cover;
+  }
+  .card-body {
+    flex: 1;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card-title {
+    color: #fff;
+    font-weight: 600;
+  }
+  .card-text {
+    color: #ccc;
+  }
+
+  .bi-chevron-right {
+    margin-left: 4px;
+  }
+  .bi-chevron-left {
+    margin-right: 4px;
+  }
+
+  /* Dark sections */
+#reviews, #contact {
+    background: #1c1c1c; /* or a gradient/pattern */
+    color: #fff;
+    padding: 4rem 0;
+  }
+
+  /* Review Cards */
+  .review-card {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+  }
+  .review-quote {
+    color: #ccc;
+    font-style: italic;
+  }
+  .review-author {
+    color: #a0743c; /* gold accent */
+    font-weight: 600;
+  }
+
+  /* Contact Columns */
+  #contact h5 {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  #contact h5::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 2px;
+    background-color: #a0743c;
+    margin: 0.5rem auto 0;
+  }
+
+  /* Map styling */
+  #contact iframe {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+
+  /* Subtle pattern + gradient background for "modern & expensive" */
+#reviews, #contact {
+    background:
+    linear-gradient(135deg, #2f2f2f 0%, #1c1c1c 70%),
+      url('/images/fancy-cushion.jpg') repeat;
+    background-blend-mode: multiply;
+    color: #fff;
+    padding: 4rem 0;
+    position: relative;
+  }
+
+  /* Gold divider/line for headings */
+  .section-title {
+    color: #fff;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 2px;
+    background-color: #a0743c;
+    margin: 1rem auto 0;
+  }
+
+  /* Example wave divider if you want a curved transition between sections */
+  .wave-divider {
+    position: relative;
+    height: 100px;
+    overflow: hidden;
+  }
+  .wave-divider::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: url('/images/wave-divider.svg') no-repeat bottom center;
+    background-size: cover;
+  }
+
+  /* Review cards with slight translucence */
+  .review-card {
+    background-color: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    color: #fff;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .review-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+  }
+  .review-quote {
+    color: #ccc;
+    font-style: italic;
+  }
+  .review-author {
+    color: #a0743c; /* gold accent */
+    font-weight: 600;
+  }
+
+  /* Contact columns, etc. */
+  #contact .col-md-4 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  #contact h5 {
+    position: relative;
+    display: inline-block;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  #contact iframe {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+

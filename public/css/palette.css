@@ -1,0 +1,81 @@
+/* palette.css */
+
+/* 1. Define your color variables */
+:root {
+    --color-dark-brown: #4E342E;   /* Primary (text, headers, nav) */
+    --color-tan: #D7CCC8;         /* Secondary background */
+    --color-light-beige: #F5F5DC; /* Main page background */
+    --color-warm-gray: #A1887F;   /* Accent color */
+    --color-off-white: #FAFAF2;   /* Lighter accent or background */
+    --color-charcoal: #212121;    /* Dark text alternative */
+    --color-white: #FFFFFF;       /* White for text on dark backgrounds */
+  }
+
+  /* 2. Example Global Styling */
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-light-beige);
+    color: var(--color-charcoal);
+    font-family: 'Playfair Display', serif; /* or your chosen font */
+  }
+
+  /* 3. Navbar Example */
+  .navbar, footer {
+    background-color: var(--color-dark-brown) !important;
+  }
+
+  .navbar-brand,
+  .navbar-nav .nav-link
+  ,footer {
+    color: var(--color-off-white) !important;
+  }
+
+  /* 4. Section Backgrounds */
+  .section-tan {
+    background-color: var(--color-tan);
+  }
+
+  .section-offwhite {
+    background-color: var(--color-off-white);
+  }
+
+  /* 5. Buttons or Accent Elements */
+  .btn-accent {
+    background-color: var(--color-warm-gray);
+    color: var(--color-white);
+    border: none;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .btn-accent:hover {
+    background-color: var(--color-dark-brown);
+  }
+
+  /* 6. Headings, Titles, etc. */
+  h1, h2, h3 {
+    color: var(--color-dark-brown);
+  }
+
+  h4, h5, h6 {
+    color: var(--color-charcoal);
+  }
+
+  /* 7. Example Card / Container */
+  .card {
+    background-color: var(--color-off-white);
+    border: none;
+    border-radius: 5px;
+  }
+
+  .card .card-title {
+    color: var(--color-dark-brown);
+  }
+
+  .card .card-text {
+    color: var(--color-charcoal);
+  }
+
+
