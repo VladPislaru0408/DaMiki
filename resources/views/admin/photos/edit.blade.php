@@ -1,7 +1,8 @@
 @extends('admin.layout')
 
 @section('content')
-    <h2>Edit Photo</h2>
+
+<h2>Edit Photo</h2>
     <form action="{{ route('admin.photos.update', $photo) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
