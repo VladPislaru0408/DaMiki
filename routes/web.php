@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\PhotoController;
 use App\Http\Controllers\FurnitureController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
 // Logout route
-Route::post('/logout', function(Request $request) {
+Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
@@ -28,3 +29,6 @@ Route::post('/logout', function(Request $request) {
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('photos', PhotoController::class);
 });
+
+Route::get('/recenzii', [ReviewController::class, 'index'])->name('reviews.index');
+Route::post('/recenzii', [ReviewController::class, 'store'])->name('reviews.store');
