@@ -14,10 +14,16 @@ class FurnitureController extends Controller
 {
     public function index()
     {
-        $furnitures = Furniture::with(['thumbnail'])->get(); // Later: ->with('photos') for modal
+        $furnitures = Furniture::with(['photos'])->get(); // folosim direct toate pozele, nu doar thumbnail
         $reviews = Review::latest()->take(10)->get();
-        return view('gallery.index', compact('furnitures', 'reviews'));
+
+        return view('home', [
+            'furnitures' => $furnitures,
+            'reviews' => $reviews,
+            'isAdmin' => Auth::check() && Auth::user()->is_admin
+        ]);
     }
+
 
     public function store(Request $request)
     {
@@ -28,8 +34,8 @@ class FurnitureController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
-            'thumbnail' => 'required|image|max:2048',
-            'photos.*' => 'nullable|image|max:2048',
+            'thumbnail' => 'required|image|max:8192',
+            'photos.*' => 'nullable|image|max:8192',
             'description' => 'nullable|string',
         ]);
 
@@ -86,7 +92,7 @@ class FurnitureController extends Controller
             'title' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'new_photos.*' => 'nullable|image|max:2048',
+            'new_photos.*' => 'nullable|image|max:8192',
         ]);
 
         $furniture = Furniture::findOrFail($id);

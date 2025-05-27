@@ -1,3 +1,4 @@
+// resources/js/components/swiper-init.js
 import Swiper from 'swiper/bundle';
 import 'swiper/css/bundle';
 
@@ -22,3 +23,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, 100);
 });
+// This code initializes a Swiper instance for a review carousel with specific settings.
+// It waits for the DOM to be fully loaded and then applies the Swiper configuration.

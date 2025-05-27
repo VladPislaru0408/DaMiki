@@ -65,7 +65,7 @@
     width: 20px;
     height: 20px;
     border-radius: 100% 100% 100% 0;
-    box-shadow: 0 0 0 2px #D90707;
+    box-shadow: 0 0 0 2px #d90707;
     animation: anm-SL-3-move 1s linear infinite;
     top: 50%;
     left: 50%;
@@ -87,4 +87,18 @@
     100% {
         top: 0;
     }
+}
+
+/* === Scrollbar Custom === */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(212, 175, 55, 0.6); /* auriu translucid */
+    border-radius: 8px;
 }

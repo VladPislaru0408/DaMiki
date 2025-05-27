@@ -14,7 +14,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/furniture/store', [FurnitureController::class, 'store'])->name('furniture.store');
+    Route::delete('/furniture/{id}', [FurnitureController::class, 'destroy'])->name('furniture.destroy');
+    Route::put('/furniture/{id}', [FurnitureController::class, 'update'])->name('furniture.update');
 });
-
-Route::delete('/furniture/{id}', [FurnitureController::class, 'destroy'])->name('furniture.destroy');
-Route::put('/furniture/{id}', [FurnitureController::class, 'update'])->name('furniture.update');
