@@ -1,32 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Login</h1>
 
-    @if(session('error'))
-        <p style="color:red;">{{ session('error') }}</p>
-    @endif
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <form action="{{ route('login.post') }}" method="POST">
+    <form method="POST" action="{{ route('login') }}" class="bg-white p-8 rounded shadow-md w-full max-w-md">
         @csrf
-        <div>
-            <label>Email</label>
-            <input type="email" name="email" required>
+
+        <h1 class="text-2xl font-bold mb-6 text-center">Admin Login</h1>
+
+        @if($errors->any())
+        <div class="mb-4 text-red-600 text-sm">
+            {{ $errors->first() }}
         </div>
-        <div>
-            <label>Password</label>
-            <input type="password" name="password" required>
+        @endif
+
+        <div class="mb-4">
+            <label for="email" class="block font-semibold">Email</label>
+            <input type="email" name="email" id="email" class="w-full border rounded px-3 py-2" required>
         </div>
-        <div>
-            <label>
-                <input type="checkbox" name="remember"> Remember Me
-            </label>
+
+        <div class="mb-6">
+            <label for="password" class="block font-semibold">Parolă</label>
+            <input type="password" name="password" id="password" class="w-full border rounded px-3 py-2" required>
         </div>
-        <button type="submit">Sign In</button>
+
+        <button type="submit" class="w-full bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition font-semibold">
+            Autentificare
+        </button>
     </form>
 
 </body>
+
 </html>

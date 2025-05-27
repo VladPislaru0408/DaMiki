@@ -6,12 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Furniture extends Model
 {
-    protected $table = 'furnitures'; // 👈 This is the fix
+    protected $table = 'furnitures';
+
+    protected $fillable = [
+        'title',
+        'price',
+        'description',
+    ];
 
     public function photos()
     {
-        return $this->hasMany(Photo::class);
+        return $this->hasMany(Photo::class)->orderBy('position');
     }
+
 
     public function thumbnail()
     {

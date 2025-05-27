@@ -20,5 +20,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 1280: { slidesPerView: 4, spaceBetween: 32 },
             }
         });
-    }, 100); // mic delay ca să fii sigur că DOM-ul este complet
+    }, 100);
 });

@@ -20,6 +20,10 @@
 </head>
 
 <body>
+    @php
+    $isAdmin = Auth::check() && Auth::user()->is_admin;
+    @endphp
+
 
     <!-- NAVBAR -->
     <header class="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-md border-b border-gold">
@@ -41,6 +45,16 @@
                 <a href="#gallery" class="text-cream no-underline hover:text-gold">Galerie</a>
                 <a href="#reviews" class="text-cream no-underline hover:text-gold">Recenzii</a>
                 <a href="#contact" class="text-cream no-underline hover:text-gold">Contact</a>
+                @auth
+                @if(Auth::user()->is_admin)
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                        Logout
+                    </button>
+                </form>
+                @endif
+                @endauth
             </nav>
         </div>
 
@@ -49,6 +63,16 @@
             <a href="#gallery" class="block text-gold font-playfair text-[22px] no-underline hover:text-yellow-400">Galerie</a>
             <a href="#reviews" class="block text-gold font-playfair text-[22px] no-underline hover:text-yellow-400">Recenzii</a>
             <a href="#contact" class="block text-gold font-playfair text-[22px] no-underline hover:text-yellow-400">Contact</a>
+            @auth
+            @if(Auth::user()->is_admin)
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                    Logout
+                </button>
+            </form>
+            @endif
+            @endauth
         </div>
     </header>
 
@@ -118,15 +142,34 @@
                     </div>
 
                     <!-- Buton -->
-                    <div class="p-6 pt-0">
+                    <div class="p-6 pt-0 space-y-3">
                         <button onclick="showModal('{{ $furniture->id }}')"
-                            class="inline-flex items-center justify-center px-5 py-2 text-[16px] font-medium rounded-lg text-black bg-buttonBg hover:bg-white transition-all">
+                            class="w-full inline-flex items-center justify-center gap-2 px-5 py-2 text-[16px] font-medium rounded-lg text-black bg-buttonBg hover:bg-cream transition-all">
                             Vezi detalii
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </button>
+
+                        @if($isAdmin)
+                        <div class="flex justify-between items-center gap-3">
+                            <button class="flex-1 bg-buttonBg hover:bg-cream text-black font-semibold py-2 rounded-lg text-sm transition"
+                                onclick="openEditModal('{{ $furniture->id }}')">
+                                ✏️ Editare
+                            </button>
+
+                            <form action="{{ route('furniture.destroy', $furniture->id) }}" method="POST"
+                                onsubmit="return confirm('Ești sigur că vrei să ștergi acest mobilier?');" class="flex-1">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-lg text-sm transition">
+                                    🗑️ Ștergere
+                                </button>
+                            </form>
+                        </div>
+                        @endif
                     </div>
+
 
                     <!-- Hidden data -->
                     <div id="furniture-{{ $furniture->id }}" class="hidden"
@@ -139,6 +182,13 @@
             </div>
             @endforeach
         </div>
+        @if($isAdmin)
+        <button class="fixed bottom-6 right-6 z-50 bg-gold text-black px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-yellow-400 transition"
+            onclick="document.getElementById('addFurnitureModal').classList.remove('hidden')">
+            + Adaugă mobilier
+        </button>
+        @endif
+
     </section>
 
 
@@ -281,7 +331,7 @@
                 </div>
             </div>
             <!-- ✅ Toast Notification -->
-            <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gold text-black px-4 py-2 rounded shadow-md text-sm font-medium opacity-0 transition-opacity duration-300 z-50 flex items-center gap-2">
+            <div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gold text-black px-4 py-2 rounded shadow-md text-sm font-medium opacity-0 transition-opacity duration-300 z-50 flex items-center gap-2 pointer-events-none">
                 <span id="toast-icon">📋</span>
                 <span id="toast-message">Text copied to clipboard!</span>
             </div>
@@ -341,6 +391,10 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- Sortable JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
 
     <script>
@@ -479,7 +533,6 @@
         function showToast(message, icon = '📋') {
             const toast = document.getElementById('toast');
 
-            // dacă toast-ul are sub-elemente (icon + mesaj)
             const toastIcon = toast.querySelector('#toast-icon');
             const toastMessage = toast.querySelector('#toast-message');
 
@@ -487,7 +540,6 @@
                 toastIcon.textContent = icon;
                 toastMessage.textContent = message;
             } else {
-                // fallback dacă e un singur span
                 toast.textContent = `${icon} ${message}`;
             }
 
@@ -499,10 +551,374 @@
                 toast.classList.add('opacity-0');
             }, 2500);
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById("addFurnitureModal");
+
+            // ESC KEY
+            document.addEventListener("keydown", function(e) {
+                if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+                    modal.classList.add("hidden");
+                }
+            });
+
+            // CLICK OUTSIDE modal content
+            modal.addEventListener("click", function(e) {
+                if (e.target === modal) {
+                    modal.classList.add("hidden");
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById("editFurnitureModal");
+
+            // ESC KEY
+            document.addEventListener("keydown", function(e) {
+                if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+                    modal.classList.add("hidden");
+                }
+            });
+
+            // CLICK OUTSIDE modal content
+            modal.addEventListener("click", function(e) {
+                if (e.target === modal) {
+                    modal.classList.add("hidden");
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const editForm = document.getElementById("editForm");
+
+            editForm.addEventListener("submit", function(e) {
+                const existingPhotos = Array.from(document.querySelectorAll("#existingPhotosList li"))
+                    .map(li => li.dataset.id);
+                const newPhotosInput = document.getElementById("newPhotos");
+                const newPhotoCount = newPhotosInput.files.length;
+                const thumbnailId = document.getElementById("thumbnailId").value;
+
+                const totalPhotos = existingPhotos.length + newPhotos.length;
+
+                if (totalPhotos === 0) {
+                    alert("Trebuie să adaugi cel puțin o poză.");
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!thumbnailId) {
+                    alert("Trebuie să selectezi o imagine ca thumbnail.");
+                    e.preventDefault();
+                    return;
+                }
+
+                // Dacă totul e ok, formularul se trimite
+            });
+        });
+
+        if (document.getElementById('editForm')) {
+            document.getElementById('editForm').addEventListener('submit', function(e) {
+                const thumb = document.getElementById('thumbnailId').value;
+                if (!thumb) {
+                    e.preventDefault();
+                    alert('Te rugăm să selectezi o imagine principală (thumbnail).');
+                }
+            });
+        }
+
+
+        // === GALLERY EDIT LOGIC ===
+
+        let currentThumbId = null;
+        let deletedIds = [];
+        let newPhotos = []; // array de File
+        let newPhotoThumbId = null;
+        const photoDataCache = {}; // cache pentru datele pozelor
+
+        function generateUniqueId() {
+            return 'id-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
+        }
+
+        function highlightThumbnail() {
+            document.querySelectorAll('#existingPhotosList li').forEach(li => {
+                li.classList.remove('ring-2', 'ring-yellow-500');
+
+                if (li.dataset.id && parseInt(li.dataset.id) === currentThumbId) {
+                    li.classList.add('ring-2', 'ring-yellow-500');
+                }
+                if (li.dataset.new && li.dataset.new === newPhotoThumbId) {
+                    li.classList.add('ring-2', 'ring-yellow-500');
+                }
+            });
+        }
+
+        function updateHiddenInputs() {
+            const order = [];
+            document.querySelectorAll('#existingPhotosList li').forEach(li => {
+                if (li.dataset.id) order.push(li.dataset.id);
+                if (li.dataset.new) order.push('new-' + li.dataset.new);
+            });
+
+            document.getElementById('photoOrder').value = order.join(',');
+            document.getElementById('deletedPhotos').value = deletedIds.join(',');
+            if (currentThumbId !== null) {
+                document.getElementById('thumbnailId').value = currentThumbId;
+            } else if (newPhotoThumbId !== null) {
+                document.getElementById('thumbnailId').value = 'new-' + newPhotoThumbId;
+            } else {
+                document.getElementById('thumbnailId').value = '';
+            }
+        }
+
+        function renderGallery(id) {
+            const container = document.getElementById('existingPhotosList');
+            container.innerHTML = '';
+
+            // === 1. Imagini existente din DB ===
+            const photoList = photoDataCache[id] || [];
+            photoList.forEach(photo => {
+                if (deletedIds.includes(photo.id)) return;
+
+                const li = document.createElement('li');
+                li.className = 'relative w-[100px] h-[100px] border rounded overflow-hidden shadow-sm';
+                li.dataset.id = photo.id;
+
+                const img = document.createElement('img');
+                img.src = '/' + photo.image_path;
+                img.className = 'w-full h-full object-cover';
+
+                const delBtn = document.createElement('button');
+                delBtn.innerText = '🗑️';
+                delBtn.className = 'absolute top-1 right-1 bg-white rounded px-1 py-0 text-xs';
+                delBtn.onclick = () => {
+                    deletedIds.push(photo.id);
+                    if (currentThumbId == photo.id) currentThumbId = null;
+                    renderGallery(id);
+                };
+
+                const thumbBtn = document.createElement('button');
+                thumbBtn.innerText = '⭐';
+                thumbBtn.className = 'absolute bottom-1 left-1 bg-white rounded px-1 py-0 text-xs';
+                thumbBtn.onclick = () => {
+                    currentThumbId = photo.id;
+                    newPhotoThumbId = null;
+                    highlightThumbnail();
+                    updateHiddenInputs();
+                };
+
+                li.appendChild(img);
+                li.appendChild(delBtn);
+                li.appendChild(thumbBtn);
+                container.appendChild(li);
+
+                if (photo.is_thumbnail && currentThumbId === null) {
+                    currentThumbId = photo.id;
+                }
+            });
+
+            // === 2. Imagini noi (neîncărcate încă) ===
+            newPhotos.forEach((photoObj, index) => {
+                const {
+                    id: newId,
+                    file
+                } = photoObj;
+
+                const li = document.createElement('li');
+                li.className = 'relative w-[100px] h-[100px] border rounded overflow-hidden shadow-sm';
+                li.dataset.new = newId;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-full object-cover';
+                    li.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+
+                const delBtn = document.createElement('button');
+                delBtn.innerText = '🗑️';
+                delBtn.className = 'absolute top-1 right-1 bg-white rounded px-1 py-0 text-xs';
+                delBtn.onclick = () => {
+                    const idx = newPhotos.findIndex(p => p.id === newId);
+                    if (idx !== -1) newPhotos.splice(idx, 1);
+                    renderGallery(id);
+                };
+
+                const thumbBtn = document.createElement('button');
+                thumbBtn.innerText = '⭐';
+                thumbBtn.className = 'absolute bottom-1 left-1 bg-white rounded px-1 py-0 text-xs';
+                thumbBtn.onclick = () => {
+                    newPhotoThumbId = newId;
+                    currentThumbId = null;
+                    highlightThumbnail();
+                    updateHiddenInputs();
+                };
+
+                li.appendChild(delBtn);
+                li.appendChild(thumbBtn);
+                container.appendChild(li);
+            });
+
+            highlightThumbnail();
+            updateHiddenInputs();
+        }
+
+
+        function openEditModal(id) {
+            const card = document.getElementById(`furniture-${id}`);
+            const photos = JSON.parse(card.dataset.photos);
+
+            // 🧠 Resetăm starea
+            deletedIds = [];
+            currentThumbId = null;
+            newPhotos = [];
+            newPhotoThumbId = null;
+
+            photoDataCache[id] = photos;
+
+            // ✍️ Precompletăm formularul
+            document.getElementById('editId').value = id;
+            document.getElementById('editTitle').value = card.dataset.title;
+            document.getElementById('editPrice').value = card.dataset.price;
+            document.getElementById('editDescription').value = card.dataset.description;
+            document.getElementById('editForm').action = `/furniture/${id}`;
+            const newPhotosInput = document.getElementById('newPhotos');
+            newPhotosInput.value = ''; // reset input file
+            newPhotosInput.onchange = (e) => {
+                newPhotos = Array.from(e.target.files).map(file => ({
+                    id: generateUniqueId(),
+                    file: file
+                }));
+                renderGallery(id);
+            };
+
+
+            // 📸 Afișăm toate pozele în galerie unificată
+            renderGallery(id);
+
+            // Reinițializează Sortable pe listă
+            Sortable.create(document.getElementById('existingPhotosList'), {
+                animation: 150,
+                onSort: updateHiddenInputs
+            });
+
+
+            // ✅ Afișăm modalul
+            document.getElementById('editFurnitureModal').classList.remove('hidden');
+        }
+
+
+        function closeEditModal() {
+            document.getElementById('editFurnitureModal').classList.add('hidden');
+
+            // curăță starea globală
+            deletedIds = [];
+            currentThumbId = null;
+            newPhotos = [];
+            newPhotoThumbId = null;
+
+            // opțional: golește galeria și inputurile
+            document.getElementById('existingPhotosList').innerHTML = '';
+            document.getElementById('editForm').reset();
+        }
     </script>
 
     <!-- Swiper + Vite App JS -->
     @vite('resources/js/app.js')
+    @if($isAdmin)
+    <div id="addFurnitureModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg p-6 w-full max-w-xl relative">
+            <button onclick="document.getElementById('addFurnitureModal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-xl">×</button>
+
+            <h2 class="text-xl font-bold mb-4">Adaugă mobilier nou</h2>
+
+            <form action="{{ route('furniture.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                @csrf
+
+                <!-- Titlu -->
+                <div>
+                    <label for="title" class="block font-semibold">Titlu</label>
+                    <input type="text" name="title" id="title" class="w-full border px-3 py-2 rounded" required>
+                </div>
+
+                <!-- Preț -->
+                <div>
+                    <label for="price" class="block font-semibold">Preț</label>
+                    <input type="number" name="price" id="price" class="w-full border px-3 py-2 rounded" step="0.01" required>
+                </div>
+
+                <!-- Thumbnail -->
+                <div>
+                    <label for="thumbnail" class="block font-semibold">Imagine principală (thumbnail)</label>
+                    <input type="file" name="thumbnail" id="thumbnail" class="w-full border px-3 py-2 rounded" required>
+                </div>
+
+                <!-- Alte poze -->
+                <div>
+                    <label for="photos" class="block font-semibold">Poze adiționale</label>
+                    <input type="file" name="photos[]" id="photos" class="w-full border px-3 py-2 rounded" multiple>
+                </div>
+
+                <!-- Descriere -->
+                <div>
+                    <label for="description" class="block font-semibold">Descriere</label>
+                    <textarea name="description" id="description" class="w-full border px-3 py-2 rounded resize-none" rows="4"></textarea>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="w-full bg-gold text-black py-2 rounded hover:bg-yellow-400 transition font-semibold">
+                    Salvează
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Modal  -->
+    <div id="editFurnitureModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white p-6 rounded-lg w-full max-w-xl relative">
+            <button onclick="closeEditModal()" class="absolute top-3 right-3 text-gray-600 hover:text-red-500 text-xl">×</button>
+
+            <h2 class="text-xl font-bold mb-4">Editează mobilier</h2>
+            <form id="editForm" method="POST" enctype="multipart/form-data" class="space-y-4">
+                @csrf
+                @method('PUT')
+
+                <input type="hidden" id="editId">
+
+                <label class="block font-semibold">Titlu</label>
+                <input type="text" name="title" id="editTitle" class="w-full mb-3 border px-3 py-2 rounded" required>
+
+                <label class="block font-semibold">Preț</label>
+                <input type="number" name="price" id="editPrice" class="w-full mb-3 border px-3 py-2 rounded" required step="0.01">
+
+                <label class="block font-semibold">Descriere</label>
+                <textarea name="description" id="editDescription" rows="4" class="w-full mb-4 border px-3 py-2 rounded resize-none"></textarea>
+
+                <div class="mt-4">
+                    <label class="block font-semibold mb-1">Galerie foto</label>
+                    <div id="existingPhotosList" class="flex flex-wrap gap-3"></div>
+
+                    <label for="newPhotos" class="block font-semibold mt-4">Adaugă poze</label>
+                    <input type="file" name="new_photos[]" id="newPhotos" multiple class="w-full border px-3 py-2 rounded" accept="image/*">
+                </div>
+
+
+
+                <!-- Hidden inputs -->
+                <input type="hidden" name="deleted_photos" id="deletedPhotos">
+                <input type="hidden" name="thumbnail_id" id="thumbnailId">
+                <input type="hidden" name="photo_order" id="photoOrder">
+
+
+                <button type="submit" class="w-full bg-gold text-black py-2 rounded hover:bg-yellow-400 transition font-semibold">
+                    Salvează modificările
+                </button>
+            </form>
+        </div>
+    </div>
+    @endif
+
 </body>
 
 </html>

@@ -17,7 +17,9 @@ class Photo extends Model
         'furniture_id',
         'image_path',
         'is_thumbnail',
+        'position',
     ];
+
 
     // Define the relationship between photos and furniture
     public function furniture()
