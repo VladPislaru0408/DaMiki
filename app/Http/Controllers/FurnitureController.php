@@ -9,6 +9,7 @@ use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class FurnitureController extends Controller
 {
@@ -47,6 +48,9 @@ class FurnitureController extends Controller
 
         // Save thumbnail
         $thumbPath = $request->file('thumbnail')->store('furniture', 'public'); // => storage/app/public/furniture/xyz.jpg
+        $request->file('thumbnail')
+        ->storeAs('furniture', basename($thumbPath), 'public_html');
+
         Photo::create([
             'furniture_id' => $furniture->id,
             'image_path' => 'storage/' . $thumbPath, // => se accesează în view ca /storage/furniture/xyz.jpg
