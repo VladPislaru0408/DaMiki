@@ -15,8 +15,12 @@ window.showModal = function (id) {
 
     modalTitle.textContent = title;
     modalDesc.textContent = desc;
-    if (price) {
-        modalPrice.textContent = `${parseFloat(price).toFixed(2)} RON`;
+    if (modalPrice.textContent !== undefined) {
+        // Verificăm dacă prețul este un număr valid înainte de a-l formata
+        if (isNaN(price) || price === null || price === '') {
+            modalPrice.textContent = '';
+        }
+        else modalPrice.textContent = `${parseFloat(price).toFixed(2)} RON`;
     }
 
     let currentIndex = 0;
