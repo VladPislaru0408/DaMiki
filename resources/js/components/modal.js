@@ -15,7 +15,9 @@ window.showModal = function (id) {
 
     modalTitle.textContent = title;
     modalDesc.textContent = desc;
-    modalPrice.textContent = `${parseFloat(price).toFixed(2)} RON`;
+    if (price) {
+        modalPrice.textContent = `${parseFloat(price).toFixed(2)} RON`;
+    }
 
     let currentIndex = 0;
 

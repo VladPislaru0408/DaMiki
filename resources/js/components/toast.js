@@ -61,5 +61,9 @@ export function handleClick(type, value) {
         }
     }, 500);
 }
+
+window.handleClick = handleClick;
+window.showToast = showToast;
+
 // This code defines two functions: showToast and handleClick.
 // showToast displays a toast notification with a message and an optional icon.

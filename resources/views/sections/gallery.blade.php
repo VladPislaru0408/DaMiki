@@ -22,9 +22,11 @@
                     <h5 class="relative mb-2 text-[22px] font-semibold leading-snug">
                         {{ $furniture->title }}
                     </h5>
+                    @if (!is_null($furniture->price))
                     <p class="text-[18px] text-gray-700 mb-4 font-lora">
                         {{ number_format($furniture->price, 2) }} RON
                     </p>
+                    @endif
                 </div>
 
                 <div class="p-6 pt-0 space-y-3">
@@ -67,11 +69,13 @@
     </div>
 
     @if($isAdmin)
-    <button class="fixed bottom-6 right-6 z-50 bg-gold text-black px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-yellow-400 transition"
+    <button
+        class="fixed bottom-6 right-6 z-50 bg-gold text-black px-10 py-5 text-2xl font-bold rounded-lg shadow-2xl hover:bg-yellow-400 transition-all"
         onclick="document.getElementById('addFurnitureModal').classList.remove('hidden')">
         + Adaugă mobilier
     </button>
     @endif
+
 </section>
 
 {{-- Modalul de detalii --}}

@@ -45,22 +45,17 @@
             <span id="toast-icon">📋</span>
             <span id="toast-message">Text copied to clipboard!</span>
         </div>
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}"
+            async
+            defer>
+        </script>
+        <script>
+            window.onload = function() {
+                initMap();
+            }
+        </script>
+        <!--  Maps -->
+        <div id="map" class="w-full h-[450px] rounded-xl"></div>
 
-        <!-- Google Maps -->
-        <div class="relative w-full max-w-5xl mx-auto">
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[60%] z-20 pointer-events-none">
-                <div class="loader-shape-3"></div>
-            </div>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d21872.901830539955!2d27.63668758266385!3d46.74295941081484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40ca6fc37e33305f%3A0xd83ff6821043f9f0!2s737625%20Z%C4%83podeni!5e0!3m2!1sro!2sro!4v1747935797170!5m2!1sro!2sro"
-                width="100%" 
-                height="450" 
-                style="border:0; border-radius: 12px;" 
-                allowfullscreen="" 
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                class="w-full h-[450px] rounded-xl">
-            </iframe>
-        </div>
-    </div>
 </section>
