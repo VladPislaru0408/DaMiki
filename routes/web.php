@@ -1,31 +1,19 @@
 <?php
-use App\Http\Controllers\Admin\PhotoController;
-use App\Http\Controllers\PresentationController;
-use App\Http\Controllers\Auth\LoginController;
+
+use App\Http\Controllers\FurnitureController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\LoginController;
 
-// Public presentation page (you can display all photos)
-Route::get('/', [PresentationController::class, 'index'])->name('home');
+// Public home page showing furniture gallery
+Route::get('/', [FurnitureController::class, 'index'])->name('home');
 
-
-// Show the login form
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+// Admin routes
 
-// Process the login
-Route::post('/login', [LoginController::class, 'login'])->name('login.post');
-
-Route::post('/logout', function(Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-    return redirect('/login');
-})->name('logout');
-
-// Admin routes (prefix with 'admin')
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('photos', PhotoController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::post('/furniture/store', [FurnitureController::class, 'store'])->name('furniture.store');
+    Route::delete('/furniture/{id}', [FurnitureController::class, 'destroy'])->name('furniture.destroy');
+    Route::put('/furniture/{id}', [FurnitureController::class, 'update'])->name('furniture.update');
 });
-
-

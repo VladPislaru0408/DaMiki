@@ -1,34 +1,51 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('auth.login'); // vom crea imediat acest view
     }
 
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // Check if "remember" checkbox is present
-        $remember = $request->has('remember');
-
-        // Attempt login with the "remember" option
-        if (Auth::attempt($credentials, $remember)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('admin/photos');
+
+            if (Auth::user()->is_admin) {
+                return redirect('/');
+            } else {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Acces permis doar administratorului.',
+                ]);
+            }
         }
 
-        return back()->with('error', 'Invalid credentials.');
+        return back()->withErrors([
+            'email' => 'Email sau parolă incorectă.',
+        ]);
     }
 
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
 }
