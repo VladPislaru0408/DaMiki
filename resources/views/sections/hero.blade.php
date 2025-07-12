@@ -10,7 +10,7 @@
             nu pentru toți
         </h1>
 
-        <p class="text-subtitle text-[16px] sm:text-[18px] md:text-[22px] lg:text-[26px] font-playfair mt-4 sm:mt-6 mb-8 text-white fade-in-up fade-in-up-delay-1">
+        <p class="text-subtitle text-[16px] sm:text-[18px] md:text-[22px] lg:text-[26px] font-playfair mt-4 sm:mt-6 mb-8 fade-in-up fade-in-up-delay-1">
             Transformă orice spațiu într-un loc cu personalitate. Oferim soluții personalizate, adaptate stilului tău și felului în care vrei să te simți acasă.
         </p>
 

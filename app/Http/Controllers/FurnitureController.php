@@ -16,7 +16,7 @@ class FurnitureController extends Controller
     public function index()
     {
         $furnitures = Furniture::with(['photos'])->get(); // folosim direct toate pozele, nu doar thumbnail
-        $reviews = Review::latest()->take(10)->get();
+        $reviews = Review::approved()->latest()->take(10)->get();
 
         return view('home', [
             'furnitures' => $furnitures,

@@ -1,5 +1,5 @@
 window.initMap = function () {
-    const location = { lat: 46.73416, lng: 27.65927 };
+    const location = { lat: 46.690159, lng: 27.756375 };
 
     const map = new google.maps.Map(document.getElementById("map"), {
         center: location,

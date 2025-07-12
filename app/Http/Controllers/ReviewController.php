@@ -4,28 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of approved reviews.
      */
     public function index()
     {
-        $reviews = Review::orderBy('created_at', 'desc')->take(10)->get();
+        $reviews = Review::approved()->orderBy('created_at', 'desc')->take(10)->get();
         return view('gallery.reviews', compact('reviews'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a newly created review (public submission).
      */
     public function store(Request $request)
     {
@@ -35,9 +28,62 @@ class ReviewController extends Controller
             'rating' => 'required|integer|min:1|max:5',
         ]);
 
-        Review::create($validated);
+        Review::create([
+            'name' => $validated['name'],
+            'content' => $validated['content'],
+            'rating' => $validated['rating'],
+            'status' => 'pending'
+        ]);
 
-        return redirect()->back()->with('success', 'Recenzia ta a fost adăugată cu succes!');
+        return response()->json([
+            'message' => 'Recenzia a fost trimisă cu succes! Va fi verificată de echipa noastră.',
+        ], 201);
+    }
+
+    /**
+     * Get pending reviews for admin.
+     */
+    public function pending()
+    {
+        if (!Auth::check() || !Auth::user()->is_admin) {
+            abort(403);
+        }
+        
+        $reviews = Review::pending()
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($reviews);
+    }
+
+    /**
+     * Approve a review.
+     */
+    public function approve(Request $request, $id)
+    {
+        if (!Auth::check() || !Auth::user()->is_admin) {
+            abort(403);
+        }
+        
+        $review = Review::findOrFail($id);
+        $review->approve(Auth::id());
+
+        return response()->json(['message' => 'Recenzia a fost aprobată cu succes!']);
+    }
+
+    /**
+     * Reject a review.
+     */
+    public function reject(Request $request, $id)
+    {
+        if (!Auth::check() || !Auth::user()->is_admin) {
+            abort(403);
+        }
+        
+        $review = Review::findOrFail($id);
+        $review->reject(Auth::id());
+
+        return response()->json(['message' => 'Recenzia a fost respinsă.']);
     }
 
     /**

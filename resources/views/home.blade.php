@@ -5,6 +5,7 @@
 @include('sections.hero')
 @include('sections.gallery')
 @include('sections.reviews')
+@include('sections.review-form')
 @include('sections.contact')
 @include('partials.modals.create')
 @include('partials.modals.edit')

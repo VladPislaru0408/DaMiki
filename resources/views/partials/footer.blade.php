@@ -11,7 +11,7 @@
         </p>
 
         <!-- Social media right aligned -->
-        <div class="w-full md:w-auto text-right md:text-end">
+        <!-- <div class="w-full md:w-auto text-right md:text-end">
             <h4 class="text-base font-semibold mb-2 md:mb-1 text-gold text-center sm:text-left">Urmărește-ne</h4>
             <div class="flex justify-center gap-4">
                 <a href="#" aria-label="Instagram" class="text-gold hover:text-yellow-400">
@@ -26,5 +26,5 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div> -->
 </footer>
