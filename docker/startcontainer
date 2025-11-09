@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Update the supervisor configuration with the correct port if specified
+if [ ! -z "$PORT" ]; then
+    sed -i -e "s/--port=8080/--port=$PORT/g" /etc/supervisor/conf.d/supervisord.conf
+fi
+
+# Start supervisord or the specified command
+if [ $# -gt 0 ]; then
+    exec "$@"
+else
+    /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+fi
