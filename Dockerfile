@@ -15,6 +15,6 @@ RUN bash install.sh \
     && npm run build \
     && echo "memory_limit = -1" > /usr/local/etc/php/conf.d/memory-limit.ini \
     && composer install --prefer-dist --no-scripts --no-dev --optimize-autoloader \
-    && composer clear-cache1
+    && composer clear-cache
 
 ENTRYPOINT ["startcontainer"]
